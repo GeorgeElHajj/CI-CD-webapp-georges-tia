@@ -47,7 +47,7 @@ jobs:
 
       # Step 6: Deploy to AWS S3
       - name: Deploy to S3 bucket
-        uses: aws-actions/s3-sync-action@v2
+        uses: aws-actions/s3-sync@v1
         with:
           source: ./dist
           destination: ${{ secrets.S3_BUCKET }}
