@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout code
+      # Step 1: Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -23,7 +23,7 @@ jobs:
           cp -r index.html style.css script.js dist/
           echo "✅ Build complete"
 
-      # Step 3: Simple test
+      # Step 3: Run simple test
       - name: Run simple test
         run: |
           echo "🧪 Running test..."
