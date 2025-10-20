@@ -21,7 +21,7 @@ jobs:
           echo "🏗️ Building static web app..."
           mkdir -p dist
           cp -r index.html style.css script.js dist/
-          echo "✅ Build complete"
+          echo "✅ Build complete!"
 
       # Step 3: Simple test
       - name: Run simple test
@@ -57,13 +57,10 @@ jobs:
       - name: Deploy to AWS S3
         run: |
           echo "🚀 Deploying to AWS S3..."
-          aws s3 sync ./dist s3://${{ secrets.S3_BUCKET }} --delete
+          aws s3 sync ./dist s3://${{ secrets.S3_BUCKET }} --region ${{ secrets.AWS_REGION }} --delete
           echo "✅ Deployment complete!"
         env:
           AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
-
-          
