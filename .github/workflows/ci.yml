@@ -1,4 +1,4 @@
-name: CI Setup Test
+name: Full CI Pipeline
 
 on:
   push:
@@ -7,11 +7,33 @@ on:
     branches: [ "main" ]
 
 jobs:
-  check-setup:
+  build-test-docker:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository code
+      # Step 1: Checkout repository code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Confirm CI service is running
-        run: echo "✅ GitHub Actions is successfully set up!"
+      # Step 2: Build the web app (in this case, static HTML/JS)
+      - name: Build the web application
+        run: |
+          echo "🏗️ Building static web app files..."
+          mkdir -p dist
+          cp -r index.html style.css script.js dist/
+          echo "✅ Build complete. Files moved to /dist"
+
+      # Step 3: Run automated tests (extra points)
+      - name: Run tests
+        run: bash test.sh
+
+
+      # Step 4: Build Docker image (extra points)
+      - name: Build Docker image
+        run: |
+          echo "🐳 Building Docker image..."
+          docker build -t webapp:latest .
+          echo "✅ Docker image built successfully!"
+
+      # Step 5: List Docker images to verify
+      - name: Verify Docker image
+        run: docker images
