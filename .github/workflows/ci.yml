@@ -1,24 +1,22 @@
-name: Full CI Pipeline
+name: Full CI/CD Pipeline
 
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
 
 jobs:
-  build-test-docker:
+  build-test-deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Build the web application
         run: |
-          echo "🏗️ Building static web app files..."
+          echo "🏗️ Building static web app..."
           mkdir -p dist
           cp -r index.html style.css script.js dist/
-          echo "✅ Build complete. Files moved to /dist"
 
       - name: Run simple test
         run: |
@@ -30,11 +28,13 @@ jobs:
             exit 1
           fi
 
-      - name: Build Docker image
-        run: |
-          echo "🐳 Building Docker image..."
-          docker build -t webapp:latest .
-          echo "✅ Docker image built successfully!"
-
-      - name: Verify Docker image
-        run: docker images
+      - name: Deploy to AWS S3
+        uses: aws-actions/s3-sync@v2
+        with:
+          bucket: ${{ secrets.S3_BUCKET }}
+          region: ${{ secrets.AWS_REGION }}
+          source: ./
+          args: --delete
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
