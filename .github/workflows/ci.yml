@@ -1,0 +1,17 @@
+name: CI Setup Test
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  check-setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v4
+
+      - name: Confirm CI service is running
+        run: echo "✅ GitHub Actions is successfully set up!"
